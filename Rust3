@@ -1,0 +1,20 @@
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use ic_cdk::export::Principal;
+
+    #[test]
+    fn test_send_receive() {
+        let owner = Principal::anonymous();
+        let recipient = Principal::anonymous();
+        let mut owner_wallet = Wallet::new(owner.to_string());
+        let mut recipient_wallet = Wallet::new(recipient.to_string());
+
+        owner_wallet.receive(100);
+        assert_eq!(owner_wallet.balance(), 100);
+
+        owner_wallet.send(&mut recipient_wallet, 50);
+        assert_eq!(owner_wallet.balance(), 50);
+        assert_eq!(recipient_wallet.balance(), 50);
+    }
+}
