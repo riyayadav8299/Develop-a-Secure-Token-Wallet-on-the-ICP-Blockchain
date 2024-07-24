@@ -1,0 +1,6 @@
+"canisters": {
+    "icp_token_wallet": {
+        "main": "src/icp_token_wallet/lib.rs",
+        "type": "rust"
+    }
+}
