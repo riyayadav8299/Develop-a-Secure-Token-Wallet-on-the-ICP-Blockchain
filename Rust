@@ -1,0 +1,40 @@
+use ic_cdk::export::candid::{CandidType, Deserialize};
+
+#[derive(CandidType, Deserialize)]
+pub struct Token {
+    pub balance: u64,
+}
+
+#[derive(CandidType, Deserialize)]
+pub struct Wallet {
+    pub owner: String,
+    pub tokens: Vec<Token>,
+}
+
+impl Wallet {
+    pub fn new(owner: String) -> Self {
+        Self {
+            owner,
+            tokens: vec![],
+        }
+    }
+
+    pub fn send(&mut self, recipient: &mut Wallet, amount: u64) {
+        if let Some(token) = self.tokens.iter_mut().find(|t| t.balance >= amount) {
+            token.balance -= amount;
+            recipient.receive(amount);
+        }
+    }
+
+    pub fn receive(&mut self, amount: u64) {
+        if let Some(token) = self.tokens.iter_mut().find(|t| t.balance > 0) {
+            token.balance += amount;
+        } else {
+            self.tokens.push(Token { balance: amount });
+        }
+    }
+
+    pub fn balance(&self) -> u64 {
+        self.tokens.iter().map(|t| t.balance).sum()
+    }
+}
