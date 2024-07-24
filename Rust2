@@ -1,0 +1,32 @@
+use ic_cdk::export::candid::Principal;
+use ic_cdk_macros::*;
+use std::cell::RefCell;
+
+mod token;
+use token::{Token, Wallet};
+
+thread_local! {
+    static WALLET: RefCell<Wallet> = RefCell::new(Wallet::new(String::from("owner")));
+}
+
+#[update]
+fn send(recipient: Principal, amount: u64) {
+    WALLET.with(|wallet| {
+        let mut wallet = wallet.borrow_mut();
+        let mut recipient_wallet = Wallet::new(recipient.to_string());
+        wallet.send(&mut recipient_wallet, amount);
+    });
+}
+
+#[update]
+fn receive(amount: u64) {
+    WALLET.with(|wallet| {
+        let mut wallet = wallet.borrow_mut();
+        wallet.receive(amount);
+    });
+}
+
+#[query]
+fn balance() -> u64 {
+    WALLET.with(|wallet| wallet.borrow().balance())
+}
