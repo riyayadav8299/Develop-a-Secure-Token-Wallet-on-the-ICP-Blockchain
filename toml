@@ -1,0 +1,6 @@
+[dependencies]
+ic-cdk = "0.5.3"
+ic-cdk-macros = "0.5.3"
+ic-rc = "0.2.0"
+serde = { version = "1.0", features = ["derive"] }
+candid = "0.7.0"
