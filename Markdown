@@ -1,0 +1,10 @@
+# ICP Token Wallet
+
+## Setup
+1. Install Rust via `rustup`.
+2. Install DFX SDK.
+3. Clone the repository and navigate to the project directory.
+
+```sh
+git clone <repository-url>
+cd icp_token_wallet
